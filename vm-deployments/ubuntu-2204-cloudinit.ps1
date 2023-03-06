@@ -6,3 +6,28 @@ while ($VMIDExist.Count -ne 0) {
    $VMID = Read-Host "VMID already exist! Please chose another number"
     $VMIDExist = qm status $VMID
 }
+
+$VMName = Read-Host "Enter a name for the VM"
+$Memory = 2048
+$Cores = 2
+$DiskSize = "32G"
+$UrlLink = "https://cloud-images.ubuntu.com/minimal/releases/jammy/release/ubuntu-22.04-minimal-cloudimg-amd64.img"
+# Get the file name from the URL
+$LinkFileName = Split-Path $UrlLink -Leaf
+$FileName = "ubuntu-2204.qcow2"
+$FilePath = "/$Location/$FileName"
+pvesm status | Out-Host
+$StorageName = Read-Host "Enter the storage name (eg. data)"
+$CloudInitUserName = Read-Host "Enter the username for VM (Cloud-init)"
+$CloudInitPassword = Read-Host "Enter a password for the user (Cloud-init)" -MaskInput
+$CloudInitPublicKey = "~/.ssh/id_rsa.pub"
+
+if (Test-Path $FilePath) {
+    Write-Host "File [$($FilePath)] already exists, ignoring download"
+} else {
+    Write-Host "File [$($FilePath)] does not exist, downloading.."
+    wget $UrlLink
+    # Convert the image to qcow2 format
+    Move-Item $LinkFileName $FileName
+    qemu-img resize $FileName $DiskSize
+}
