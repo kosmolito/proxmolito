@@ -6,7 +6,7 @@ I hope you find this project useful and if you have any questions or suggestions
 ## Installation
 ```bash
 # Install git, if you don't have it already
-apt get update && apt install git
+apt update && apt install git
 
 # Clone the repository
 git clone https://github.com/kosmolito/proxmolito.git
