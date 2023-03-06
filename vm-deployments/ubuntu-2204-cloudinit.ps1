@@ -47,3 +47,16 @@ if (Test-Path $CloudInitPublicKey) {
 # Set the VM to use DHCP
 qm set $VMID --ipconfig0 ip=dhcp,ip6=dhcp
 
+# Import the image to VM
+qm importdisk $VMID $FilePath $StorageName
+
+# Attach the disk to the VM
+qm set $VMID --scsi0 $StorageName":vm-$VMID-disk-0,discard=on,iothread=1,size=$DiskSize,ssd=1"
+
+# Fix the boot order, cloud-init needs to be the first boot device
+qm set $VMID --boot order="ide2;scsi0;net0;ide0"
+
+Write-Host "VM created successfully!"
+
+# Start the VM
+qm start $VMID
