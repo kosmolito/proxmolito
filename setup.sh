@@ -1,5 +1,9 @@
 #!/bin/bash
 # This script is intended to be run on a fresh install of Proxmox VE
+
+# Make the scripts in bash-scripts folder executable
+chmod +x bash-scripts/*.sh
+
 apt update
 apt install -y curl wget nano git vim curl
 apt -y full-upgrade
