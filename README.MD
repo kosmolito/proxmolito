@@ -3,6 +3,16 @@ The idea behind proxmolito came from the need to create and configure Virtual Ma
 
 I hope you find this project useful and if you have any questions or suggestions, feel free to contact me at [email protected](mailto:said.karker@gmail.com).
 
+## Prerequisites
+* [Proxmox](https://www.proxmox.com/en/) installed on a server or a hypervisor
+
+## Features
+* Create Virtual Machines
+* Configure Virtual Machines
+* Clean up Virtual Machines prior to making a template
+* Install and configure kubernetes on a Virtual Machine
+* Create and configure a new NAT network
+
 ## Installation
 ```bash
 # Install git, if you don't have it already
