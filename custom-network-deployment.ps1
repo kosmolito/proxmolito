@@ -35,3 +35,17 @@ while ($CiderNotation -lt 1 -or $CiderNotation -gt 32) {
 }
 $SubNet = $NewIFIP.Split(".")[0..2] -join "."
 $SubNet = "$SubNet.0/$CiderNotation"
+
+$IFConfigurations = @"
+
+auto $NewIFName
+iface $NewIFName inet static
+        address  $NewIFIP
+        netmask  $NewIFNetmask
+        bridge_ports none
+        bridge_stp off
+        bridge_fd 0
+post-up echo1 >/proc/sys/net/ipv4/ip_forward
+        post-up   iptables -t nat -A POSTROUTING -s '$SubNet'-o $RoutingIF -j MASQUERADE
+        post-down iptables -t nat -D POSTROUTING -s '$SubNet'-o $RoutingIF -j MASQUERADE
+"@
