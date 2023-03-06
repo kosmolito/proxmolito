@@ -58,3 +58,15 @@ if ($Confirm -notlike "y") {
     Pause
     Exit
 }
+
+write-host "updating interfaces file"
+$IFConfigurations | Out-File -FilePath $IFPath -Append
+
+Write-Host "Restarting networking.."
+/etc/init.d/networking restart
+
+Write-Host "Network interfaces updated!" -ForegroundColor Green
+
+write-host "Here is your new interfaces file" -ForegroundColor Green
+Get-Content -Path $IFPath
+Pause
