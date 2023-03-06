@@ -49,3 +49,12 @@ post-up echo1 >/proc/sys/net/ipv4/ip_forward
         post-up   iptables -t nat -A POSTROUTING -s '$SubNet'-o $RoutingIF -j MASQUERADE
         post-down iptables -t nat -D POSTROUTING -s '$SubNet'-o $RoutingIF -j MASQUERADE
 "@
+
+Write-Host "Here is the new interface configuration" -ForegroundColor Green
+$IFConfigurations | Out-Host
+$Confirm = Read-Host "Do you want to continue? (y/n)"
+if ($Confirm -notlike "y") {
+    Write-Host "Did not get confirmation! Exiting script" -ForegroundColor Red
+    Pause
+    Exit
+}
