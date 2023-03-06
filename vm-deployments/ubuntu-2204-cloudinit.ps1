@@ -31,3 +31,8 @@ if (Test-Path $FilePath) {
     Move-Item $LinkFileName $FileName
     qemu-img resize $FileName $DiskSize
 }
+
+# Create the VM with cloud-init drive
+qm create $VMID --name $VMName --autostart 1 --memory $Memory --sockets 1 --cores $Cores --agent 1 --startup order=0 `
+--net0 virtio,bridge=vmbr1 --serial0 socket --vga serial0 --scsihw virtio-scsi-pci --ide0 $StorageName":cloudinit,media=cdrom" --ide2 none,media=cdrom
+
