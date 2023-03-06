@@ -43,3 +43,7 @@ qm set $VMID --ciuser $CloudInitUserName --cipassword $CloudInitPassword
 if (Test-Path $CloudInitPublicKey) {
     qm set $VMID --sshkey ~/.ssh/id_rsa.pub
 }
+
+# Set the VM to use DHCP
+qm set $VMID --ipconfig0 ip=dhcp,ip6=dhcp
+
