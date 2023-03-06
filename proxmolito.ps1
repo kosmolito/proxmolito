@@ -18,8 +18,9 @@ function Show-Menu {
     Write-Host "2: Install Required packaes and update the VM" -ForegroundColor Green
     Write-Host "3: Prepare VM for k8s" -ForegroundColor Green
     Write-Host "4: Clean VM and make Template" -ForegroundColor Green
-    Write-Host "B:" "Back to main menu" -ForegroundColor Green
-    Write-Host "c:" "Clear the screen" -ForegroundColor Green
+    Write-Host "5: NAT Network Deployment" -ForegroundColor Green
+    Write-Host "B: Back to main menu" -ForegroundColor Green
+    Write-Host "c: Clear the screen" -ForegroundColor Green
     Write-Host "Q: To quit" -ForegroundColor Green
 }
 
@@ -97,6 +98,11 @@ do {
             scp -o "StrictHostKeyChecking=no" $SourceFile "$($VMIP):$($DestinationFile)"
             ssh $VMIP $DestinationFile
 
+        }
+
+        "5" 
+        {
+            & $Location\nat-network-deployment.ps1
         }
         
         Default {}
