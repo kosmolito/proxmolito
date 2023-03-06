@@ -36,3 +36,10 @@ if (Test-Path $FilePath) {
 qm create $VMID --name $VMName --autostart 1 --memory $Memory --sockets 1 --cores $Cores --agent 1 --startup order=0 `
 --net0 virtio,bridge=vmbr1 --serial0 socket --vga serial0 --scsihw virtio-scsi-pci --ide0 $StorageName":cloudinit,media=cdrom" --ide2 none,media=cdrom
 
+# Set the cloud-init user and password
+qm set $VMID --ciuser $CloudInitUserName --cipassword $CloudInitPassword 
+
+# Set the SSH key for the VM if it exist in the home directory of the user
+if (Test-Path $CloudInitPublicKey) {
+    qm set $VMID --sshkey ~/.ssh/id_rsa.pub
+}
