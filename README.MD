@@ -14,6 +14,9 @@ git clone https://github.com/kosmolito/proxmolito.git
 # Change directory to proxmolito
 cd proxmolito
 
+# Make setup.sh executable
+chmod +x setup.sh
+
 # install the dependencies incl. PowerShell
 ./setup.sh
 ```
