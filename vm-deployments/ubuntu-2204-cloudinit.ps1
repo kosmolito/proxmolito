@@ -66,9 +66,9 @@ if (Test-Path $FilePath) {
     Write-Host "File [$($FilePath)] already exists, ignoring download"
 } else {
     Write-Host "File [$($FilePath)] does not exist, downloading.."
-    wget $UrlLink
+    wget $UrlLink -P $ConfigFolder
     # Convert the image to qcow2 format
-    Move-Item $LinkFileName $FileName
+    Move-Item $ConfigFolder/$LinkFileName $ConfigFolder/$FileName
     qemu-img resize $FileName $DiskSize
 }
 
