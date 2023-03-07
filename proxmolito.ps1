@@ -7,14 +7,15 @@ function Show-Menu {
     $VMSelected | Format-table -Property VMName,DomainName,IPAddress,DNSAddress,NetworkSwitches
     Write-Host "================ $Title ================"
     
-    Write-Host "1: Deploy Ubuntu Server VM" -ForegroundColor Green
-    Write-Host "2: Install Required packaes and update the VM" -ForegroundColor Green
-    Write-Host "3: Prepare VM for k8s" -ForegroundColor Green
-    Write-Host "4: Clean VM and make Template" -ForegroundColor Green
-    Write-Host "5: NAT Network Deployment" -ForegroundColor Green
-    Write-Host "B: Back to main menu" -ForegroundColor Green
-    Write-Host "c: Clear the screen" -ForegroundColor Green
-    Write-Host "Q: To quit" -ForegroundColor Green
+    Write-Host  "1: Deploy Ubuntu Server VM" -ForegroundColor Green
+    Write-Host  "2: Install Required packaes and update the VM" -ForegroundColor Green
+    Write-Host  "3: Prepare VM for k8s" -ForegroundColor Green
+    Write-Host  "4: Clean VM and make Template" -ForegroundColor Green
+    Write-Host  "5: NAT Network Deployment" -ForegroundColor Green
+    Write-Host "99: Change the user config settings" -ForegroundColor Green
+    Write-Host  "B: Back to main menu" -ForegroundColor Green
+    Write-Host  "C: Clear the screen" -ForegroundColor Green
+    Write-Host  "Q: To quit" -ForegroundColor Green
 }
 
 
@@ -96,6 +97,18 @@ do {
         "5" 
         {
             & $Location\nat-network-deployment.ps1
+        }
+
+        "99"
+        {
+            Write-Host "Your current config settings:" -ForegroundColor Green
+            $ConfigView = ($Config).Global,(($Config).VM | 
+            Select-Object * -ExcludeProperty CloudInit,VMNetwork),($Config).VM.CloudInit, ($Config).VM.VMNetwork | Format-List
+            $ConfigView | Out-Host
+            $Confirmation = Read-Host "Do you want to change the settings? (y/n)"
+            if ($Confirmation -like "y") {
+                & $Location/config-editor.ps1
+            }
         }
         
         Default {}
