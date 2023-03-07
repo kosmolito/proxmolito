@@ -3,7 +3,6 @@ function Show-Menu {
     param (
         [string]$Title
     )
-    Write-Host -ForegroundColor red "Existing VM Selected To Configure"
     $VMSelected | Format-table -Property VMName,DomainName,IPAddress,DNSAddress,NetworkSwitches
     Write-Host "================ $Title ================"
     
@@ -20,7 +19,7 @@ function Show-Menu {
 
 
 do {
-    Show-Menu -Title "Proxmox VM Utilities"
+    Show-Menu -Title "P R O X M O L I T O"
     $Selection = Read-Host "Please make a selection"
     # Get the current location
     $Location = Get-Location
