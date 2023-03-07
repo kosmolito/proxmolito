@@ -22,8 +22,6 @@ if ($CloudInitPublicKey -eq "") { $CloudInitPublicKey = "~/.ssh/id_rsa.pub" } el
         }
     }
 }
-$CloudInitDefault = Read-Host "Do you want to use the default cloud-init settings? (y/n)"
-if ($CloudInit -like "y") { $CloudInit = $true} else { $CloudInit = $false }
 
 # VM Network settings
 $vmbr = Read-Host "Enter the default bridge for the VM network, (default: vmbr1)"
@@ -39,8 +37,8 @@ if ($IPSettings -like "static") {
     $IP6Address = "DHCP"
 }
 
-$VMNetworkDefault = Read-Host "Do you want to use this network settings as the default? (y/n)"
-if ($VMNetworkDefault -like "y") { $VMNetworkDefault = $true} else { $VMNetworkDefault = $false }
+$CloudInitDefault = Read-Host "Do you want to use this as default cloud-init settings? (y/n):"
+if ($CloudInitDefault -like "y") { $CloudInitDefault = $true} else { $CloudInitDefault = $false }
 
 
 $ConfigFile = "$ConfigFolder/config.json"
@@ -55,21 +53,18 @@ $Config = [PSCustomObject]@{
     }
     # VM settings
     VM = [PSCustomObject]@{
-        UseDefault = $false
+        UseAsDefault = $false
         # Hardware settings
         Memory = 2048
         Cores = 2
         DiskSize = "32G"
         # CloudInit settings
         CloudInit = [PSCustomObject]@{
-            UseDefault = $CloudInitDefault
+            UseAsDefault = $CloudInitDefault
             UserName = $CloudInitUserName
             Password = $CloudInitPassword
             PublicKey = $CloudInitPublicKey
-        }
-        # Network settings
-        VMNetwork = [PSCustomObject]@{
-            UseDefault = $VMNetworkDefault
+
             Bridge = $VMBR
             IP = $IP4Address
             IP6 = $IP6Address
