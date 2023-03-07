@@ -25,6 +25,13 @@ $StorageName = Read-Host "Enter the storage name (eg. data)"
 
 if ($Config.CloudInit.UseDefault -eq $false) {
 
+Write-Host "Available network bridges:" -ForegroundColor Green | Out-Host
+$AvailableBridges | Out-Host
+$vmbr = Read-Host "Enter the network bridge (eg. vmbr1)"
+
+$IPV4 = Read-Host "Enter the IP address and cidr for the VM (eg. 10.10.10.20/24), leave blank for DHCP"
+if ($IPV4 -eq "") { $IPV4 = "dhcp" } else { $IPV4Gateway = Read-Host "Enter the gateway for the VM" }
+
 $CloudInitUserName = Read-Host "Enter the username for VM (Cloud-init)"
 $CloudInitPassword = Read-Host "Enter a password for the user (Cloud-init)" -MaskInput
 
@@ -59,6 +66,8 @@ $CloudInitPublicKey = Read-Host "Do you want to add a SSH public key (Cloud-init
     $CloudInitUserName = $Config.VM.CloudInit.UserName
     $CloudInitPassword = $Config.VM.CloudInit.Password
     $CloudInitPublicKey = $Config.VM.CloudInit.PublicKey
+    $vmbr = $Config.VM.Network.Bridge
+    $IPV4 = $Config.VM.Network.IPV4
 }
 
 
@@ -72,9 +81,23 @@ if (Test-Path $FilePath) {
     qemu-img resize $FileName $DiskSize
 }
 
+if ($Config.VM.Hardware.UseAsDefault -eq $false) {
+    Write-Host "The Maximum number of CPU cores is: $CPUCores" -ForegroundColor Yellow | Out-Host 
+    $Cores = Read-Host "Enter the number of CPU cores (eg. 2)"
+    $Memory = Read-Host "Enter the amount of memory in MB (eg. 2048)"
+    $DiskSize = Read-Host "Enter the size of the disk (eg. 32G)"
+
+    $Cores = [int]$Cores
+    $Memory = [int]$Memory
+} else {
+    $Cores = $Config.VM.Hardware.Cores
+    $Memory = $Config.VM.Hardware.Memory
+    $DiskSize = $Config.VM.Hardware.DiskSize
+}
+
 # Create the VM with cloud-init drive
 qm create $VMID --name $VMName --autostart 1 --memory $Memory --sockets 1 --cores $Cores --agent 1 --startup order=0 `
---net0 virtio,bridge=vmbr1 --serial0 socket --vga serial0 --scsihw virtio-scsi-pci --ide0 $StorageName":cloudinit,media=cdrom" --ide2 none,media=cdrom
+--net0 virtio,bridge=$vmbr --serial0 socket --vga serial0 --scsihw virtio-scsi-pci --ide0 $StorageName":cloudinit,media=cdrom" --ide2 none,media=cdrom
 
 # Set the cloud-init user and password
 qm set $VMID --ciuser $CloudInitUserName --cipassword $CloudInitPassword 
@@ -85,7 +108,12 @@ if (Test-Path $CloudInitPublicKey) {
 }
 
 # Set the VM to use DHCP
-qm set $VMID --ipconfig0 ip=dhcp,ip6=dhcp
+if ($IPV4 -eq "dhcp") {
+    qm set $VMID --ipconfig0 ip=dhcp,ip6=dhcp
+} else {
+    # Set the VM to use a static IP
+    qm set $VMID --ipconfig0 ip=$IPV4,gw=$IPV4Gateway,ip6=dhcp
+}
 
 # Import the image to VM
 qm importdisk $VMID $FilePath $StorageName

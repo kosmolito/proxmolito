@@ -4,6 +4,24 @@
 $SnapShot = Read-Host "Do you want to make a snapshot of the VM before the configuration? (y/n)"
 if ($SnapShot -like "y") { $SnapShot = $true} else { $SnapShot = $false }
 
+$Memory = Read-Host "Enter the default memory for the VM in MB, (default: 2048)"
+if ($Memory -eq "") { $Memory = 2048 } else { $Memory = [int]$Memory }
+
+$MaxCPUCores = [int]((((lscpu | egrep "NUMA|CPU/(s/)")[1]).Split(":")[1] -split "\s{1,}")[1]).Split("-")[1] + 1
+Write-Host "The Maximum number of CPU cores is: $CPUCores" -ForegroundColor Yellow | Out-Host 
+$CPU = Read-Host "Enter the default number of CPUs for the VM, (default: 2)"
+if ($CPU -eq "") { $CPU = 2 } elseif ($CPU -gt $MaxCPUCores) {
+    Write-Host "The number of CPUs is greater than the maximum number of CPU cores" -ForegroundColor Red
+    $CPU = 2
+    Write-Host "The number of CPUs is set to: $CPU" -ForegroundColor Yellow
+} else { $CPU = [int]$CPU }
+
+$DiskSize = Read-Host "Enter the default disk size for the VM in GB, (default: 32)"
+if ($DiskSize -eq "") { $DiskSize = "32G" } else { $DiskSize = "$([int]$DiskSize)G" }
+
+$HardwareDefault = Read-Host "Do you want to use this hardware settings as default? (y/n)"
+if ($HardwareDefault -like "y") { $HardwareDefault = $true} else { $HardwareDefault = $false }
+
 # CloudInit settings
 $CloudInitUserName = Read-Host "Enter the default username for the cloud-init configuration"
 $CloudInitPassword = Read-Host "Enter the default password for the cloud-init configuration" -MaskInput
@@ -46,18 +64,20 @@ $Config = [PSCustomObject]@{
     # Global settings
     Global = [PSCustomObject]@{
         HostName = hostname
-        AppFolder = (Get-Location).Path
+        AppFolder = $PSScriptRoot
         ConfigFolder = $ConfigFolder
         # Default if the user want to make a snapshot of the VM before the configuration
         SnapShot = $false
     }
     # VM settings
     VM = [PSCustomObject]@{
-        UseAsDefault = $false
-        # Hardware settings
-        Memory = 2048
-        Cores = 2
-        DiskSize = "32G"
+        Hardware = [PSCustomObject]@{
+            # Hardware settings
+            UseAsDefault = $HardwareDefault
+            Memory = $Memory
+            Cores = $CPU
+            DiskSize = $DiskSize
+        }
         # CloudInit settings
         CloudInit = [PSCustomObject]@{
             UseAsDefault = $CloudInitDefault
