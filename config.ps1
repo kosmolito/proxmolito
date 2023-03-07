@@ -2,12 +2,11 @@ $Location = (Get-Location).Path
 $ParentPath = Split-Path -Path $Location -Parent
 $ConfigFolder = "$ParentPath/proxmolito-config"
 
-
-
 if (!(Test-Path -Path $ConfigFolder)) {
 
-    Write-Host "Creating the folder $ConfigFolder" -ForegroundColor Green
+    Write-Host "Creating the config folder $ConfigFolder" -ForegroundColor Green
     New-Item -ItemType Directory -Path $ConfigFolder | Out-Null
+    New-Item -ItemType File -Path "$ConfigFolder/config.json" | Out-Null
 
 $WelCome = @"
 ###################################################################
