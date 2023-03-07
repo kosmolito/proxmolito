@@ -8,7 +8,7 @@ $Memory = Read-Host "Enter the default memory for the VM in MB, (default: 2048)"
 if ($Memory -eq "") { $Memory = 2048 } else { $Memory = [int]$Memory }
 
 $MaxCPUCores = [int]((((lscpu | egrep "NUMA|CPU/(s/)")[1]).Split(":")[1] -split "\s{1,}")[1]).Split("-")[1] + 1
-Write-Host "The Maximum number of CPU cores is: $CPUCores" -ForegroundColor Yellow | Out-Host 
+Write-Host "The Maximum number of CPU cores is: $MaxCPUCores" -ForegroundColor Yellow | Out-Host 
 $CPU = Read-Host "Enter the default number of CPUs for the VM, (default: 2)"
 if ($CPU -eq "") { $CPU = 2 } elseif ($CPU -gt $MaxCPUCores) {
     Write-Host "The number of CPUs is greater than the maximum number of CPU cores" -ForegroundColor Red
@@ -86,8 +86,8 @@ $Config = [PSCustomObject]@{
             PublicKey = $CloudInitPublicKey
 
             Bridge = $VMBR
-            IP4V = $IP4Address
-            IP6V = $IP6Address
+            IPV4 = $IP4Address
+            IPV6 = $IP6Address
         }
     }
 }

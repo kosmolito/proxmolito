@@ -109,7 +109,7 @@ if (Test-Path $CloudInitPublicKey) {
 }
 
 # Set the VM to use DHCP
-if ($IPV4 -eq "dhcp") {
+if ($IPV4 -like "dhcp") {
     qm set $VMID --ipconfig0 ip=dhcp,ip6=dhcp
 } else {
     # Set the VM to use a static IP
