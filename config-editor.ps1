@@ -9,7 +9,7 @@ $CloudInitUserName = Read-Host "Enter the default username for the cloud-init co
 $CloudInitPassword = Read-Host "Enter the default password for the cloud-init configuration" -MaskInput
 
 write-host "Enter the path for default public key for the cloud-init configuration"
-$CloudInitPublicKey = Read-Host "Enter for default public key (~/.ssh/id_rsa.pub)"
+$CloudInitPublicKey = Read-Host "Press Enter for default public key (~/.ssh/id_rsa.pub) or enter the path for the public key"
 if ($CloudInitPublicKey -eq "") { $CloudInitPublicKey = "~/.ssh/id_rsa.pub" } else {
     if (!(Test-Path -Path $CloudInitPublicKey)) {
         Write-Host "The file $CloudInitPublicKey does not exist" -ForegroundColor Red
@@ -29,11 +29,18 @@ if ($CloudInit -like "y") { $CloudInit = $true} else { $CloudInit = $false }
 $vmbr = Read-Host "Enter the default bridge for the VM network, (default: vmbr1)"
 if ($vmbr -eq "") { $vmbr = "vmbr1" }
 
-$IPAddress = Read-Host "Enter the default IP address for the VM network, (default: DHCP)"
-if ($IPAddress -eq "") { $IPAddress = "DHCP" }
+$IPSettings = Read-Host "Would you like to use DHCP or Static IP? (dhcp/static)"
+if ($IPSettings -like "static") {
+    $IP4Address = "static"
+    $IP6Address = "static"
+
+} else {
+    $IP4Address = "DHCP"
+    $IP6Address = "DHCP"
+}
 
 $VMNetworkDefault = Read-Host "Do you want to use the default network settings? (y/n)"
-if ($VMNetwork -like "y") { $VMNetwork = $true} else { $VMNetwork = $false }
+if ($VMNetworkDefault -like "y") { $VMNetworkDefault = $true} else { $VMNetworkDefault = $false }
 
 
 $ConfigFile = "$ConfigFolder/config.json"
@@ -64,11 +71,8 @@ $Config = [PSCustomObject]@{
         VMNetwork = [PSCustomObject]@{
             UseDefault = $VMNetworkDefault
             Bridge = $VMBR
-            IP = "DHCP"
-            IP6 = "DHCP"
-            Netmask = "255.255.255.0"
-            Gateway = ""
-            DNS = ""
+            IP = $IP4Address
+            IP6 = $IP6Address
         }
     }
 }
