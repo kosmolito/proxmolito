@@ -19,34 +19,43 @@ $FileName = "ubuntu-2204.qcow2"
 $FilePath = "/$ConfigFolder/$FileName"
 pvesm status | Out-Host
 $StorageName = Read-Host "Enter the storage name (eg. data)"
+
+if ($Config.CloudInit.UseDefault -eq $false) {
+
 $CloudInitUserName = Read-Host "Enter the username for VM (Cloud-init)"
 $CloudInitPassword = Read-Host "Enter a password for the user (Cloud-init)" -MaskInput
 
 $CloudInitPublicKey = Read-Host "Do you want to add a SSH public key (Cloud-init)? (y/n)"
-if ($CloudInitPublicKey -eq "y") {
-    Write-Host "Enter the path to the SSH public key (Cloud-init)" -ForegroundColor Green
-    $CloudInitPublicKey = Read-Host "Leave blank for default (~/.ssh/id_rsa.pub)"
-    if ($CloudInitPublicKey -eq "") {
-        $CloudInitPublicKey = "~/.ssh/id_rsa.pub"
-        if (!(Test-Path $CloudInitPublicKey)) {
-            Write-Host "The file $CloudInitPublicKey does not exist" -ForegroundColor Red
-            $CloudInitPublicKey = Read-Host "Do you want to create a SSH key pair? (y/n)"
-            if ($CloudInitPublicKey -like "y") {
-                $SSHComment = Read-Host "Enter a comment for the SSH key pair"
-                ssh-keygen -t rsa -C "$SSHComment"
-                $CloudInitPublicKey = "~/.ssh/id_rsa.pub"
+    if ($CloudInitPublicKey -eq "y") {
+        Write-Host "Enter the path to the SSH public key (Cloud-init)" -ForegroundColor Green
+        $CloudInitPublicKey = Read-Host "Leave blank for default (~/.ssh/id_rsa.pub)"
+        if ($CloudInitPublicKey -eq "") {
+            $CloudInitPublicKey = "~/.ssh/id_rsa.pub"
+            if (!(Test-Path $CloudInitPublicKey)) {
+                Write-Host "The file $CloudInitPublicKey does not exist" -ForegroundColor Red
+                $CloudInitPublicKey = Read-Host "Do you want to create a SSH key pair? (y/n)"
+                if ($CloudInitPublicKey -like "y") {
+                    $SSHComment = Read-Host "Enter a comment for the SSH key pair"
+                    ssh-keygen -t rsa -C "$SSHComment"
+                    $CloudInitPublicKey = "~/.ssh/id_rsa.pub"
+                }
+            }
+
+        } else {
+            $isExistCloudInitPublicKey =  Test-Path $CloudInitPublicKey
+            
+            while ($isExistCloudInitPublicKey -eq $false) {
+                Write-Host "The file $CloudInitPublicKey does not exist" -ForegroundColor Red
+                $CloudInitPublicKey = Read-Host "Enter the path to the SSH public key (Cloud-init)"
+                $isExistCloudInitPublicKey =  Test-Path $CloudInitPublicKey
             }
         }
+    }
 
-    } else {
-        $isExistCloudInitPublicKey =  Test-Path $CloudInitPublicKey
-        
-        while ($isExistCloudInitPublicKey -eq $false) {
-            Write-Host "The file $CloudInitPublicKey does not exist" -ForegroundColor Red
-            $CloudInitPublicKey = Read-Host "Enter the path to the SSH public key (Cloud-init)"
-            $isExistCloudInitPublicKey =  Test-Path $CloudInitPublicKey
-        }
-}
+} else {
+    $CloudInitUserName = $Config.CloudInit.UserName
+    $CloudInitPassword = $Config.CloudInit.Password
+    $CloudInitPublicKey = $Config.CloudInit.PublicKey
 }
 
 
@@ -69,7 +78,7 @@ qm set $VMID --ciuser $CloudInitUserName --cipassword $CloudInitPassword
 
 # Set the SSH key for the VM if it exist in the home directory of the user
 if (Test-Path $CloudInitPublicKey) {
-    qm set $VMID --sshkey ~/.ssh/id_rsa.pub
+    qm set $VMID --sshkey $CloudInitPublicKey
 }
 
 # Set the VM to use DHCP
