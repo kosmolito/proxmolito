@@ -56,9 +56,9 @@ $CloudInitPublicKey = Read-Host "Do you want to add a SSH public key (Cloud-init
     }
 
 } else {
-    $CloudInitUserName = $Config.CloudInit.UserName
-    $CloudInitPassword = $Config.CloudInit.Password
-    $CloudInitPublicKey = $Config.CloudInit.PublicKey
+    $CloudInitUserName = $Config.VM.CloudInit.UserName
+    $CloudInitPassword = $Config.VM.CloudInit.Password
+    $CloudInitPublicKey = $Config.VM.CloudInit.PublicKey
 }
 
 
