@@ -4,7 +4,7 @@ if (!($IsLinux)) {
     exit
 }
 
-$Location = (Get-Location).Path
+$Location = $PSScriptRoot
 $ParentPath = Split-Path -Path $Location -Parent
 $ConfigFolder = "$ParentPath/proxmolito-config"
 
