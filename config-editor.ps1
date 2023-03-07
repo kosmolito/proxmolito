@@ -39,7 +39,7 @@ if ($IPSettings -like "static") {
     $IP6Address = "DHCP"
 }
 
-$VMNetworkDefault = Read-Host "Do you want to use the default network settings? (y/n)"
+$VMNetworkDefault = Read-Host "Do you want to use this network settings as the default? (y/n)"
 if ($VMNetworkDefault -like "y") { $VMNetworkDefault = $true} else { $VMNetworkDefault = $false }
 
 
