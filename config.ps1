@@ -15,6 +15,9 @@ if (!(Test-Path -Path $ConfigFolder)) {
     New-Item -ItemType File -Path "$ConfigFolder/config.json" | Out-Null
 
 $WelCome = @"
+
+
+
 ###################################################################
 #####################  Welcome to Proxmolito  #####################
 
@@ -28,8 +31,9 @@ But for now, I am focusing on the main goal of proxmolito,
 which is to create and configure Virtual Machines.
 
 I hope you find this project useful.
+###################################################################
 "@
-
+Clear-Host
 $WelCome | Out-Host
 Pause
 
