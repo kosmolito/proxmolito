@@ -63,7 +63,7 @@ write-host "updating interfaces file"
 $IFConfigurations | Out-File -FilePath $IFPath -Append
 
 Write-Host "Restarting networking.."
-/etc/init.d/networking restart
+ifdown --exclude=lo -a && ifup --exclude=lo -a
 
 Write-Host "Network interfaces updated!" -ForegroundColor Green
 
