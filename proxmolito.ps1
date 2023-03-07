@@ -6,15 +6,15 @@ function Show-Menu {
     $VMSelected | Format-table -Property VMName,DomainName,IPAddress,DNSAddress,NetworkSwitches
     Write-Host "================ $Title ================"
     
-    Write-Host  "1: Deploy Ubuntu Server VM" -ForegroundColor Green
-    Write-Host  "2: Install Required packaes and update the VM" -ForegroundColor Green
-    Write-Host  "3: Prepare VM for k8s" -ForegroundColor Green
-    Write-Host  "4: Clean VM and make Template" -ForegroundColor Green
-    Write-Host  "5: NAT Network Deployment" -ForegroundColor Green
+    Write-Host " 1: Deploy Ubuntu Server VM" -ForegroundColor Green
+    Write-Host " 2: Install Required packaes and update the VM" -ForegroundColor Green
+    Write-Host " 3: Prepare VM for k8s" -ForegroundColor Green
+    Write-Host " 4: Clean VM and make Template" -ForegroundColor Green
+    Write-Host " 5: NAT Network Deployment" -ForegroundColor Green
     Write-Host "99: Change the user config settings" -ForegroundColor Green
-    Write-Host  "B: Back to main menu" -ForegroundColor Green
-    Write-Host  "C: Clear the screen" -ForegroundColor Green
-    Write-Host  "Q: To quit" -ForegroundColor Green
+    Write-Host " B: Back to main menu" -ForegroundColor Green
+    Write-Host " C: Clear the screen" -ForegroundColor Green
+    Write-Host " Q: To quit" -ForegroundColor Green
 }
 
 

@@ -66,8 +66,8 @@ $CloudInitPublicKey = Read-Host "Do you want to add a SSH public key (Cloud-init
     $CloudInitUserName = $Config.VM.CloudInit.UserName
     $CloudInitPassword = $Config.VM.CloudInit.Password
     $CloudInitPublicKey = $Config.VM.CloudInit.PublicKey
-    $vmbr = $Config.VM.Network.Bridge
-    $IPV4 = $Config.VM.Network.IPV4
+    $vmbr = $Config.VM.CloudInit.Bridge
+    $IPV4 = $Config.VM.CloudInit.IPV4
 }
 
 
@@ -96,8 +96,9 @@ if ($Config.VM.Hardware.UseAsDefault -eq $false) {
 }
 
 # Create the VM with cloud-init drive
+$Net = "virtio,bridge=$($vmbr)"
 qm create $VMID --name $VMName --autostart 1 --memory $Memory --sockets 1 --cores $Cores --agent 1 --startup order=0 `
---net0 virtio,bridge=$vmbr --serial0 socket --vga serial0 --scsihw virtio-scsi-pci --ide0 $StorageName":cloudinit,media=cdrom" --ide2 none,media=cdrom
+--net0 $Net --serial0 socket --vga serial0 --scsihw virtio-scsi-pci --ide0 $StorageName":cloudinit,media=cdrom" --ide2 none,media=cdrom
 
 # Set the cloud-init user and password
 qm set $VMID --ciuser $CloudInitUserName --cipassword $CloudInitPassword 

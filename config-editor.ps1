@@ -86,8 +86,8 @@ $Config = [PSCustomObject]@{
             PublicKey = $CloudInitPublicKey
 
             Bridge = $VMBR
-            IP = $IP4Address
-            IP6 = $IP6Address
+            IP4V = $IP4Address
+            IP6V = $IP6Address
         }
     }
 }
