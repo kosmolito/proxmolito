@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # This script is intended to be run on a fresh install ubuntu vm
-sudo apt update && sudo apt upgrade
+sudo apt update && sudo apt upgrade -y
 
 # Install system components
 sudo apt install -y qemu-guest-agent nano curl wget nano git gnupg iputils-ping
