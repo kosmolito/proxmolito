@@ -1,3 +1,4 @@
+. $PSScriptRoot\config.ps1
 $Date = Get-Date -Format "yyyy-MM-dd-HHmm"
 $IFPath = "/etc/network/interfaces"
 $IFBackupPath = "/etc/network/interfaces-$Date.bak"

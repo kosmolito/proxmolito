@@ -1,4 +1,4 @@
-. ./config.ps1
+. $PSScriptRoot\config.ps1
 
 # Global settings
 $SnapShot = Read-Host "Do you want to make a snapshot of the VM before the configuration? (y/n)"
