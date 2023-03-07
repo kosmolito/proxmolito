@@ -18,10 +18,10 @@ $WelCome = @"
 
 
 
-###################################################################
-#####################  Welcome to Proxmolito  #####################
+#####################################################################################
+##############################  Welcome to Proxmolito  ##############################
 
-The main goal is to quickly deploy a virtual machines, setup networking, 
+The main goal is to quickly deploy a virtual machines, setup networking,
 and configure cloud-init without having to remember all the commands and options.
 
 I am planning to add more features to proxmolito in the future, 
@@ -31,7 +31,7 @@ But for now, I am focusing on the main goal of proxmolito,
 which is to create and configure Virtual Machines.
 
 I hope you find this project useful.
-###################################################################
+#####################################################################################
 "@
 Clear-Host
 $WelCome | Out-Host
