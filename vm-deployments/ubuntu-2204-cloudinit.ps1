@@ -1,4 +1,7 @@
-. ../config.ps1
+# Load the config script
+$ParentFolder = Split-Path $PSScriptRoot -Parent
+. $ParentFolder/main.ps1
+
 Write-Host "Deploy Ubuntu Server VM" -ForegroundColor Green | Out-Host
 $VMID = Read-Host "Enter the VM ID (eg. 999), Make sure it is available!"
 # Check if the VMID already exist
