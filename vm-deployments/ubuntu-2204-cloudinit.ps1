@@ -70,17 +70,6 @@ $CloudInitPublicKey = Read-Host "Do you want to add a SSH public key (Cloud-init
     $IPV4 = $Config.VM.CloudInit.IPV4
 }
 
-
-if (Test-Path $FilePath) {
-    Write-Host "File [$($FilePath)] already exists, ignoring download"
-} else {
-    Write-Host "File [$($FilePath)] does not exist, downloading.."
-    wget $UrlLink -P $ConfigFolder
-    # Convert the image to qcow2 format
-    Move-Item $ConfigFolder/$LinkFileName $ConfigFolder/$FileName
-    qemu-img resize $FileName $DiskSize
-}
-
 if ($Config.VM.Hardware.UseAsDefault -eq $false) {
     Write-Host "The Maximum number of CPU cores is: $CPUCores" -ForegroundColor Yellow | Out-Host 
     $Cores = Read-Host "Enter the number of CPU cores (eg. 2)"
@@ -93,6 +82,16 @@ if ($Config.VM.Hardware.UseAsDefault -eq $false) {
     $Cores = $Config.VM.Hardware.Cores
     $Memory = $Config.VM.Hardware.Memory
     $DiskSize = $Config.VM.Hardware.DiskSize
+}
+
+if (Test-Path $FilePath) {
+    Write-Host "File [$($FilePath)] already exists, ignoring download"
+} else {
+    Write-Host "File [$($FilePath)] does not exist, downloading.."
+    wget $UrlLink -P $ConfigFolder
+    # Convert the image to qcow2 format
+    Move-Item $ConfigFolder/$LinkFileName $ConfigFolder/$FileName
+    qemu-img resize $FileName $DiskSize
 }
 
 # Create the VM with cloud-init drive
