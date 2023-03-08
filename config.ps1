@@ -48,4 +48,5 @@ if ($CreateNATNetwork -like "y") {
 } else {
     $Config = Get-Content -Path $ConfigFile | ConvertFrom-Json -Depth 5
     $AvailableBridge = Get-Content -Path /etc/network/interfaces | Where-Object {$_ -match "iface " -or $_ -match "address " -or $_ -match "netmask "}
+    $Date = Get-Date -Format "yyyy-MM-dd-HHmm"
 }

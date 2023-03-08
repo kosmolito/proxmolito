@@ -32,7 +32,30 @@ do {
 
         "2" 
         {
-            Write-Host "Install Required packaes and update the VM" -ForegroundColor Green | Out-Host
+            ################## Install Required packaes and update the VM ###################
+            Write-Host "Installing Required packaes and update the VM" -ForegroundColor Green
+            If ($Config.VM.Global.SnapShot -eq $true) {
+                $SnapDate = Get-Date -Format "yyyy_MM_dd_HHmm"
+                Write-Host "Creating a snapshot of the VM" -ForegroundColor Green
+                $VMID = Read-Host "Enter the VM ID"
+                write-host  "Allowed Characters: [A-Z],[a-z][0-9],[_]" -ForegroundColor Yellow | Out-Host
+                write-host "[min character: 2],[Must start with letter]" -ForegroundColor Yellow | Out-Host
+                $SnapShotName = Read-Host -Prompt "Enter the snapshot name"
+                if ($SnapShotName -like "") {
+                    $SnapShotName = "Before_Post_Deployment_$SnapDate"
+                }
+
+                Write-Host "Creating a snapshot of the VMID $VMID with the name $SnapShotName..."
+                New-VMSnapshot -VMID $VMID -SnapShotName $SnapShotName
+                if (!($?)) {
+                    write-host "Error creating the snapshot, press any key to continue" -ForegroundColor Red
+                    Pause
+                } else {
+                    write-host "Snapshot created, press any key to continue" -ForegroundColor Green
+                    Pause
+                }
+            }
+
             if ($VMIP -like "") {
                 $VMIP = Read-Host "Enter the IP address for the VM"
             } else {
@@ -52,7 +75,30 @@ do {
 
         "3" 
         {
-            Write-Host "Installing K8s and all the dependencies" -ForegroundColor Green
+            ################## Prepare VM for k8s ###################
+            Write-Host "Prepare VM for k8s" -ForegroundColor Green
+            If ($Config.VM.Global.SnapShot -eq $true) {
+                $SnapDate = Get-Date -Format "yyyy_MM_dd_HHmm"
+                Write-Host "Creating a snapshot of the VM" -ForegroundColor Green
+                $VMID = Read-Host "Enter the VM ID"
+                write-host  "Allowed Characters: [A-Z],[a-z][0-9],[_]" -ForegroundColor Yellow | Out-Host
+                write-host "[min character: 2],[Must start with letter]" -ForegroundColor Yellow | Out-Host
+                $SnapShotName = Read-Host -Prompt "Enter the snapshot name"
+                if ($SnapShotName -like "") {
+                    $SnapShotName = "Before_Post_Deployment_$SnapDate"
+                }
+
+                Write-Host "Creating a snapshot of the VMID $VMID with the name $SnapShotName..."
+                qm snapshot $VMID $SnapShotName
+                if (!($?)) {
+                    write-host "Error creating the snapshot, press any key to continue" -ForegroundColor Red
+                    Pause
+                } else {
+                    write-host "Snapshot created, press any key to continue" -ForegroundColor Green
+                    Pause
+                }
+            }
+
             if ($VMIP -like "") {
                 $VMIP = Read-Host "Enter the IP address for the VM"
             } else {
@@ -76,6 +122,29 @@ do {
         {
             ################## Clean the machine to make a Template ###################
             Write-Host "Cleaning the machine to make a Template" -ForegroundColor Green
+
+            If ($Config.VM.Global.SnapShot -eq $true) {
+                $SnapDate = Get-Date -Format "yyyy_MM_dd_HHmm"
+                Write-Host "Creating a snapshot of the VM" -ForegroundColor Green
+                $VMID = Read-Host "Enter the VM ID"
+                write-host  "Allowed Characters: [A-Z],[a-z][0-9],[_]" -ForegroundColor Yellow | Out-Host
+                write-host "[min character: 2],[Must start with letter]" -ForegroundColor Yellow | Out-Host
+                $SnapShotName = Read-Host -Prompt "Enter the snapshot name"
+                if ($SnapShotName -like "") {
+                    $SnapShotName = "Before_Post_Deployment_$SnapDate"
+                }
+
+                Write-Host "Creating a snapshot of the VMID $VMID with the name $SnapShotName..."
+                qm snapshot $VMID $SnapShotName
+                if (!($?)) {
+                    write-host "Error creating the snapshot, press any key to continue" -ForegroundColor Red
+                    Pause
+                } else {
+                    write-host "Snapshot created, press any key to continue" -ForegroundColor Green
+                    Pause
+                }
+            }
+
             if ($VMIP -like "") {
                 $VMIP = Read-Host "Enter the IP address for the VM"
             } else {
