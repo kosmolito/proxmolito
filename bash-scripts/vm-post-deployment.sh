@@ -1,13 +1,21 @@
 #!/bin/bash
 
 # This script is intended to be run on a fresh install ubuntu vm
+echo "########## Updating system ##########"
 sudo apt update && sudo apt upgrade -y
 
 # Install system components
-sudo apt install -y qemu-guest-agent nano curl wget nano git gnupg iputils-ping
+echo "########## Installing system components ##########"
+sudo apt install -y qemu-guest-agent
+
+Echo "########## Enabling qemu-guest-agent ##########"
+sudo systemctl enable qemu-guest-agent
+
+echo "########## Installing utility softwares ##########"
+sudo apt install -y nano curl wget nano git gnupg iputils-ping
 
 # ########## Install PowerShell ##########
-
+echo "########## Installing PowerShell ##########"
 # Update the list of packages
 sudo apt-get update
 # Install pre-requisite packages.
@@ -22,4 +30,6 @@ sudo apt-get update
 sudo apt-get install -y powershell
 
 # Restart the shell so that PATH changes take effect
+echo "########## System Update & Software Installation Done ##########"
+echo "########## Restarting the VM ##########"
 nohup sudo reboot &>/dev/null & exit
