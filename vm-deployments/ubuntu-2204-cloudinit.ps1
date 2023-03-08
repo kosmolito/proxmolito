@@ -33,7 +33,7 @@ $IPV4 = Read-Host "Enter the IP address and cidr for the VM (eg. 10.10.10.20/24)
 if ($IPV4 -eq "") { $IPV4 = "dhcp" } else { $IPV4Gateway = Read-Host "Enter the gateway for the VM" }
 
 $CloudInitUserName = Read-Host "Enter the username for VM (Cloud-init)"
-$CloudInitPassword = Read-Host "Enter a password for the user (Cloud-init)" -MaskInput
+$CloudInitPassword = Read-Host -Prompt "Enter a password for the user (Cloud-init)" -MaskInput
 
 $CloudInitPublicKey = Read-Host "Do you want to add a SSH public key (Cloud-init)? (y/n)"
     if ($CloudInitPublicKey -eq "y") {
@@ -64,7 +64,7 @@ $CloudInitPublicKey = Read-Host "Do you want to add a SSH public key (Cloud-init
 
 } else {
     $CloudInitUserName = $Config.VM.CloudInit.UserName
-    $CloudInitPassword = $Config.VM.CloudInit.Password
+    $CloudInitPassword = Read-Host -Prompt "Enter a password for the user (Cloud-init)" -MaskInput
     $CloudInitPublicKey = $Config.VM.CloudInit.PublicKey
     $vmbr = $Config.VM.CloudInit.Bridge
     $IPV4 = $Config.VM.CloudInit.IPV4

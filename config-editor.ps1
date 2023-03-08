@@ -24,7 +24,6 @@ if ($HardwareDefault -like "y") { $HardwareDefault = $true} else { $HardwareDefa
 
 # CloudInit settings
 $CloudInitUserName = Read-Host "Enter the default username for the cloud-init configuration"
-$CloudInitPassword = Read-Host "Enter the default password for the cloud-init configuration" -MaskInput
 
 write-host "Enter the path for default public key for the cloud-init configuration"
 $CloudInitPublicKey = Read-Host "Press Enter for default public key (~/.ssh/id_rsa.pub) or enter the path for the public key"
@@ -55,7 +54,7 @@ if ($IPSettings -like "static") {
     $IP6Address = "DHCP"
 }
 
-$CloudInitDefault = Read-Host "Do you want to use this as default cloud-init settings? (y/n):"
+$CloudInitDefault = Read-Host "Do you want to use this as default cloud-init settings? (y/n)"
 if ($CloudInitDefault -like "y") { $CloudInitDefault = $true} else { $CloudInitDefault = $false }
 
 
@@ -82,7 +81,6 @@ $Config = [PSCustomObject]@{
         CloudInit = [PSCustomObject]@{
             UseAsDefault = $CloudInitDefault
             UserName = $CloudInitUserName
-            Password = $CloudInitPassword
             PublicKey = $CloudInitPublicKey
 
             Bridge = $VMBR
