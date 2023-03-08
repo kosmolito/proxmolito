@@ -44,6 +44,7 @@ if ($CloudInitPublicKey -eq "") { $CloudInitPublicKey = "~/.ssh/id_rsa.pub" } el
 }
 
 # VM Network settings
+$AvailableBridge | Out-Host
 $vmbr = Read-Host "Enter the default bridge for the VM network, (default: vmbr1)"
 if ($vmbr -eq "") { $vmbr = "vmbr1" }
 
@@ -62,7 +63,7 @@ if ($CloudInitDefault -like "y") { $CloudInitDefault = $true} else { $CloudInitD
 
 
 $ConfigFile = "$ConfigFolder/config.json"
-$Config = [PSCustomObject]@{
+$ConfigSettings = [PSCustomObject]@{
     # Global settings
     Global = [PSCustomObject]@{
         HostName = hostname
@@ -94,5 +95,6 @@ $Config = [PSCustomObject]@{
 }
 
 Write-Host "Saving the file $ConfigFile..." -ForegroundColor Green
-$Config | ConvertTo-Json -Depth 5 | Out-File -FilePath $ConfigFile -Encoding UTF8 -Force
+$ConfigSettings | ConvertTo-Json -Depth 5 | Out-File -FilePath $ConfigFile -Encoding UTF8 -Force
+start-sleep -Seconds 2
 Write-Host "The file $ConfigFile saved successfully." -ForegroundColor Green

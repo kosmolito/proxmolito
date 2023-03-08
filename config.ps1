@@ -7,6 +7,7 @@ if (!($IsLinux)) {
 $Location = $PSScriptRoot
 $ParentPath = Split-Path -Path $Location -Parent
 $ConfigFolder = "$ParentPath/proxmolito-config"
+$ConfigFile = "$ConfigFolder/config.json"
 
 if (!(Test-Path -Path $ConfigFolder)) {
 
@@ -45,6 +46,6 @@ if ($CreateNATNetwork -like "y") {
 & $Location/config-editor.ps1
 
 } else {
-    $Config = Get-Content -Path "$ConfigFolder/config.json" | ConvertFrom-Json -Depth 5
+    $Config = Get-Content -Path $ConfigFile | ConvertFrom-Json -Depth 5
     $AvailableBridge = Get-Content -Path /etc/network/interfaces | Where-Object {$_ -match "iface " -or $_ -match "address " -or $_ -match "netmask "}
 }
