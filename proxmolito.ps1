@@ -101,8 +101,7 @@ do {
         "99"
         {
             Write-Host "Your current config settings:" -ForegroundColor Green
-            $ConfigView = ($Config).Global,(($Config).VM | 
-            Select-Object * -ExcludeProperty CloudInit,VMNetwork),($Config).VM.CloudInit | Format-List
+            $ConfigView = ($Config).Global,($Config).VM.Hardware,($Config).VM.CloudInit | Format-List
             $ConfigView | Out-Host
             $Confirmation = Read-Host "Do you want to change the settings? (y/n)"
             if ($Confirmation -like "y") {
