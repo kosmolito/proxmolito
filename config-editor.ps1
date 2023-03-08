@@ -8,13 +8,16 @@ $Memory = Read-Host "Enter the default memory for the VM in MB, (default: 2048)"
 if ($Memory -eq "") { $Memory = 2048 } else { $Memory = [int]$Memory }
 
 $MaxCPUCores = [int]((((lscpu | egrep "NUMA|CPU/(s/)")[1]).Split(":")[1] -split "\s{1,}")[1]).Split("-")[1] + 1
-Write-Host "The Maximum number of CPU cores is: $MaxCPUCores" -ForegroundColor Yellow | Out-Host 
-$CPU = Read-Host "Enter the default number of CPUs for the VM, (default: 2)"
-if ($CPU -eq "") { $CPU = 2 } elseif ($CPU -gt $MaxCPUCores) {
-    Write-Host "The number of CPUs is greater than the maximum number of CPU cores" -ForegroundColor Red
-    $CPU = 2
-    Write-Host "The number of CPUs is set to: $CPU" -ForegroundColor Yellow
-} else { $CPU = [int]$CPU }
+Write-Host "The Maximum number of CPU cores: $MaxCPUCores" -ForegroundColor Yellow | Out-Host 
+[int]$CPU = Read-Host "Enter the default number of CPUs for the VM, (default: 2)"
+
+if ($CPU -eq "") { $CPU = 2 } else {
+    while ($CPU -gt $MaxCPUCores) {
+    Write-Host "The number of CPUs ($CPU) is greater than the maximum number of CPU cores ($MaxCPUCores)" -ForegroundColor Red
+    [int]$CPU = Read-Host "Enter the default number of CPUs for the VM, (default: 2)"
+    if ($CPU -eq "") { $CPU = 2 }
+    }
+}
 
 $DiskSize = Read-Host "Enter the default disk size for the VM in GB, (default: 32)"
 if ($DiskSize -eq "") { $DiskSize = "32G" } else { $DiskSize = "$([int]$DiskSize)G" }
