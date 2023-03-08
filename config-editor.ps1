@@ -29,7 +29,7 @@ if ($HardwareDefault -like "y") { $HardwareDefault = $true} else { $HardwareDefa
 $CloudInitUserName = Read-Host "Enter the default username for the cloud-init configuration"
 
 write-host "Enter the path for default public key for the cloud-init configuration"
-$CloudInitPublicKey = Read-Host "Press Enter for default public key (~/.ssh/id_rsa.pub) or enter the path for the public key"
+$CloudInitPublicKey = Read-Host "Enter the path for the public key (blank for ~/.ssh/id_rsa.pub)"
 if ($CloudInitPublicKey -eq "") { $CloudInitPublicKey = "~/.ssh/id_rsa.pub" } else {
     if (!(Test-Path -Path $CloudInitPublicKey)) {
         Write-Host "The file $CloudInitPublicKey does not exist" -ForegroundColor Red
@@ -61,6 +61,49 @@ if ($IPSettings -like "static") {
 $CloudInitDefault = Read-Host "Do you want to use this as default cloud-init settings? (y/n)"
 if ($CloudInitDefault -like "y") { $CloudInitDefault = $true} else { $CloudInitDefault = $false }
 
+################### SSH Config settings
+$SSHConfigFilePath = "~/.ssh/config"
+$SSHConfigFile = Get-Content -Path $SSHConfigFilePath
+$AvailableBridges = Get-Content -Path /etc/network/interfaces | Where-Object {$_ -match "iface " -or $_ -match "address "}
+
+$AddHost = Read-Host "Do you want to add a new host/nework to SSH config file? (y/n)"
+if ($AddHost -eq "y") {
+    $AvailableBridges | out-host
+    Write-Host "eg. 10.10.10.12 for a single host or 10.10.10.* for a network" -ForegroundColor Yellow
+    $HostAddress = Read-Host "Enter the IP address of the host/network"
+    $User = Read-Host "Enter the username (blank for $CloudInitUserName)"
+    if ($User -eq "") { $User = $CloudInitUserName } else { $User = $User }
+
+    $Port = Read-Host "Enter the port (blank for 22)"
+    if ($Port -eq "") { $Port = 22 } else { $Port = $Port }
+    $IdentityFile = Read-Host "Enter the path to the private key (blank for ~/.ssh/id_rsa)"
+    if ($IdentityFile -eq "") { $IdentityFile = "~/.ssh/id_rsa" } else { $IdentityFile = $IdentityFile }
+$NewHostSettings = @"
+
+
+Host $HostAddress
+        User $User
+        Port $Port
+        IdentityFile $IdentityFile
+"@
+    $HostFound = 0
+    $SSHConfigFile | ForEach-Object {
+        if ($_ -match "Host $HostAddress") {
+            $HostFound = $HostFound + 1
+            write-host "$_ already exists in SSH config file" -ForegroundColor Yellow
+        }
+    }
+    
+    if ($HostFound -ne 0) {
+        Write-Host "Host $HostAddress already exists in SSH config file" -ForegroundColor Yellow
+    } else {
+        Write-Host "Adding $HostAddress to SSH config file" -ForegroundColor Green
+        $NewHostSettings | Out-File -FilePath $SSHConfigFilePath -Append
+        Write-Host "Host $HostAddress added to SSH config file" -ForegroundColor Green
+        Write-Host "SSH config file content:" -ForegroundColor Yellow
+        Get-Content -Path $SSHConfigFilePath | Out-Host
+    }
+} else { Write-Host "No new host/network added to SSH config file" -ForegroundColor Yellow }
 
 $ConfigFile = "$ConfigFolder/config.json"
 $ConfigSettings = [PSCustomObject]@{
