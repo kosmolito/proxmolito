@@ -90,8 +90,8 @@ if (Test-Path $FilePath) {
     Write-Host "File [$($FilePath)] does not exist, downloading.."
     wget $UrlLink -P $ConfigFolder
     # Convert the image to qcow2 format
-    Move-Item $ConfigFolder/$LinkFileName $ConfigFolder/$FileName
-    qemu-img resize $FileName $DiskSize
+    Move-Item $ConfigFolder/$LinkFileName $FilePath
+    qemu-img resize $FilePath $DiskSize
 }
 
 # Create the VM with cloud-init drive
@@ -127,4 +127,12 @@ qm set $VMID --boot order="ide2;scsi0;net0;ide0"
 Write-Host "VM created successfully!"
 
 # Start the VM
-qm start $VMID
+$StartVM = Read-Host "Do you want to start the VM? (y/n)"
+if ($StartVM -like "y") {
+    Write-Host "Starting the VM.." -ForegroundColor Green
+    qm start $VMID
+
+} else {
+    Write-Host "The VM is not started" -ForegroundColor Yellow
+}
+Write-Host "Done!" -ForegroundColor Green
