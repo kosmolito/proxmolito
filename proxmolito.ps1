@@ -34,7 +34,7 @@ do {
         {
             ################## Install Required packaes and update the VM ###################
             Write-Host "Installing Required packaes and update the VM" -ForegroundColor Green
-            If ($Config.VM.Global.SnapShot -eq $true) {
+            If ($Config.VM.Hardware.SnapShot -eq $true) {
                 $SnapDate = Get-Date -Format "yyyy_MM_dd_HHmm"
                 Write-Host "Creating a snapshot of the VM" -ForegroundColor Green
                 $VMID = Read-Host "Enter the VM ID"
