@@ -1,8 +1,8 @@
 . $PSScriptRoot\config.ps1
 
 # Global settings
-$SnapShot = Read-Host "Do you want to make a snapshot of the VM before the configuration? (y/n)"
-if ($SnapShot -like "y") { $SnapShot = $true} else { $SnapShot = $false }
+$SnapShotDefault = Read-Host "Do you want to make a snapshot of the VM before the configuration? (y/n)"
+if ($SnapShotDefault -like "y") { $SnapShotDefault = $true} else { $SnapShotDefault = $false }
 
 $Memory = Read-Host "Enter the default memory for the VM in MB, (default: 2048)"
 if ($Memory -eq "") { $Memory = 2048 } else { $Memory = [int]$Memory }
@@ -69,8 +69,7 @@ $ConfigSettings = [PSCustomObject]@{
         HostName = hostname
         AppFolder = $PSScriptRoot
         ConfigFolder = $ConfigFolder
-        # Default if the user want to make a snapshot of the VM before the configuration
-        SnapShot = $false
+
     }
     # VM settings
     VM = [PSCustomObject]@{
@@ -80,6 +79,8 @@ $ConfigSettings = [PSCustomObject]@{
             Memory = $Memory
             Cores = $CPU
             DiskSize = $DiskSize
+            # Default if the user want to make a snapshot of the VM before the configuration
+            SnapShot = $SnapShotDefault
         }
         # CloudInit settings
         CloudInit = [PSCustomObject]@{
