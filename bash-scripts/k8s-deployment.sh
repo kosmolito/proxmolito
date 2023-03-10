@@ -65,4 +65,9 @@ sudo apt update && sudo apt install -y kubelet kubeadm kubectl
 # Mark the packages as hold so that they are not updated automatically
 echo "########## Marking the packages as hold so that they are not updated automatically ##########"
 sudo apt-mark hold kubelet kubeadm kubectl
+
+############ Install bash completion for kubectl ############
+echo "########## Setting up autocomplete in bash for kubectl ##########"
+source <(kubectl completion bash) # set up autocomplete in bash into the current shell, bash-completion package should be installed first.
+echo "source <(kubectl completion bash)" >> ~/.bashrc # add autocomplete permanently to your bash shell.
 echo "########## Kubernetes Installation Done ##########"
