@@ -12,7 +12,6 @@ sudo rm /var/lib/dbus/machine-id
 echo "Creating symlink for machine-id"
 sudo ln -s /etc/machine-id /var/lib/dbus/machine-id
 
-echo "Machine is clean. Powering off to make it a Template!"
+echo "Machine is clean. Powering off the VM!"
 
-echo "You can now create a new VM from this Template"
 sudo poweroff
