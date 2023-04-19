@@ -70,4 +70,5 @@ sudo apt-mark hold kubelet kubeadm kubectl
 echo "########## Setting up autocomplete in bash for kubectl ##########"
 source <(kubectl completion bash) # set up autocomplete in bash into the current shell, bash-completion package should be installed first.
 echo "source <(kubectl completion bash)" >> ~/.bashrc # add autocomplete permanently to your bash shell.
+echo "complete -F __start_kubectl k" >> ~/.bashrc # add autocomplete permanently to your bash shell, for kubectl alias k.
 echo "########## Kubernetes Installation Done ##########"
