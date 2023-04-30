@@ -14,7 +14,7 @@ echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt
 
 # Then install required packages.
 sudo apt update
-sudo apt install wget curl nano vim git kubelet kubeadm kubectl -y
+sudo apt install wget curl nano vim git kubectl=1.26.4-00 kubeadm=1.26.4-00 kubelet=1.26.4-00 -y
 sudo apt-mark hold kubelet kubeadm kubectl
 
 ##################################################################################
@@ -74,6 +74,13 @@ sudo su -c "mkdir -p /etc/containerd/"
 sudo su -c "containerd config default>/etc/containerd/config.toml"
 # Change the false to true
 sudo su -c "sed -i 's/systemd_cgroup = false/systemd_cgroup = true/' /etc/containerd/config.toml"
+
+# Set runtime-endpoint to containerd.sock
+sudo tee /etc/crictl.yaml<<EOF
+runtime-endpoint: "unix:///run/containerd/containerd.sock"
+timeout: 0
+debug: false
+EOF
 
 # restart containerd
 sudo systemctl restart containerd
