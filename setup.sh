@@ -12,17 +12,22 @@ apt install -y curl wget nano git vim curl
 apt -y full-upgrade
 
 ########## Install PowerShell ##########
-# Install system components
-apt update  && apt install -y curl gnupg apt-transport-https
 
-# Import the public repository GPG keys
-curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
+# Install PowerShell only if it is not already installed
+if [ ! -f /usr/bin/pwsh ]; then
+    # Install system components
+    apt update  && apt install -y curl gnupg apt-transport-https
 
-# Register the Microsoft Product feed
-sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-debian-bullseye-prod bullseye main" > /etc/apt/sources.list.d/microsoft.list'
+    # Import the public repository GPG keys
+    curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
 
-# Install PowerShell
-apt update && apt install -y powershell
+    # Register the Microsoft Product feed
+    sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-debian-bullseye-prod bullseye main" > /etc/apt/sources.list.d/microsoft.list'
+
+    # Install PowerShell
+    apt update && apt install -y powershell
+
+fi
 
 # Restart the shell so that PATH changes take effect
 [ -f /var/run/reboot-required ] && reboot -f

@@ -46,7 +46,7 @@ do {
                 }
 
                 Write-Host "Creating a snapshot of the VMID $VMID with the name $SnapShotName..."
-                New-VMSnapshot -VMID $VMID -SnapShotName $SnapShotName
+                qm snapshot $VMID $SnapShotName
                 if (!($?)) {
                     write-host "Error creating the snapshot, press any key to continue" -ForegroundColor Red
                     Pause
@@ -159,6 +159,8 @@ do {
 
             scp -o "StrictHostKeyChecking=no" $SourceFile "$($VMIP):$($DestinationFile)"
             ssh $VMIP $DestinationFile
+            Write-Host "Machine ID cleaned, You can now convert it to a Template." -ForegroundColor Green
+            Pause
 
         }
 

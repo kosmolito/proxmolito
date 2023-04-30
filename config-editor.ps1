@@ -141,4 +141,5 @@ $ConfigSettings = [PSCustomObject]@{
 Write-Host "Saving the file $ConfigFile..." -ForegroundColor Green
 $ConfigSettings | ConvertTo-Json -Depth 5 | Out-File -FilePath $ConfigFile -Encoding UTF8 -Force
 start-sleep -Seconds 2
+$Config = $Config = Get-Content -Path $ConfigFile | ConvertFrom-Json -Depth 5
 Write-Host "The file $ConfigFile saved successfully." -ForegroundColor Green
