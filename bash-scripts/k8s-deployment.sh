@@ -50,6 +50,13 @@ echo "########## Configuring containerd ##########"
 containerd config default | sudo tee /etc/containerd/config.toml >/dev/null 2>&1
 sudo sed -i 's/SystemdCgroup \= false/SystemdCgroup \= true/g' /etc/containerd/config.toml
 
+# Set runtime-endpoint to containerd.sock
+sudo tee /etc/crictl.yaml<<EOF
+runtime-endpoint: "unix:///run/containerd/containerd.sock"
+timeout: 0
+debug: false
+EOF
+
 # Restart containerd
 echo "########## Restarting containerd ##########"
 sudo systemctl restart containerd
@@ -61,7 +68,8 @@ curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add
 sudo apt-add-repository "deb http://apt.kubernetes.io/ kubernetes-xenial main"
 
 echo "########## Installing Kubectl, kubeadm & kubelet ##########"
-sudo apt update && sudo apt install -y kubelet kubeadm kubectl
+sudo apt update
+sudo apt install wget curl nano vim git kubectl=1.26.4-00 kubeadm=1.26.4-00 kubelet=1.26.4-00 -y
 # Mark the packages as hold so that they are not updated automatically
 echo "########## Marking the packages as hold so that they are not updated automatically ##########"
 sudo apt-mark hold kubelet kubeadm kubectl
