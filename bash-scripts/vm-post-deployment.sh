@@ -33,6 +33,15 @@ if [ ! -f /usr/bin/pwsh ]; then
     sudo apt-get install -y powershell
 fi
 
+# ########## Configuring nano ##########
+tee ~/.nanorc<<EOF
+set tabsize 2
+set tabstospaces
+bind f3 whereis main
+bind F3 findnext main
+bind f4 Replace main
+EOF
+
 # Restart the shell so that PATH changes take effect
 echo "########## System Update & Software Installation Done ##########"
 echo "########## Restarting the VM ##########"
