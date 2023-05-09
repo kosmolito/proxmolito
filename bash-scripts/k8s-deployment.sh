@@ -74,6 +74,11 @@ sudo apt install wget curl nano vim git etcd kubectl=1.26.4-00 kubeadm=1.26.4-00
 echo "########## Marking the packages as hold so that they are not updated automatically ##########"
 sudo apt-mark hold kubelet kubeadm kubectl
 
+echo "########## Installing Helm ##########"
+sudo snap install helm --classic
+echo "########## Installing k9s ##########"
+sudo snap install k9s
+
 ############ Install bash completion for kubectl, kubeadm & crictl ############
 echo "########## Setting up autocomplete in bash for kubectl ##########"
 source <(kubectl completion bash) # set up autocomplete in bash into the current shell, bash-completion package should be installed first.
@@ -82,4 +87,6 @@ echo "alias k=kubectl" >> ~/.bashrc
 echo "complete -F __start_kubectl k" >> ~/.bashrc # add autocomplete permanently to your bash shell, for kubectl alias k.
 echo "source <(kubeadm completion bash)" >> ~/.bashrc
 echo "source <(crictl completion bash)" >> ~/.bashrc
+echo "source <(helm completion bash)" >> ~/.bashrc
+
 echo "########## Kubernetes Installation Done ##########"
