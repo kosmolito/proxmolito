@@ -12,7 +12,7 @@ Echo "########## Enabling qemu-guest-agent ##########"
 sudo systemctl enable qemu-guest-agent
 
 echo "########## Installing utility softwares ##########"
-sudo apt install -y nano curl wget nano git gnupg iputils-ping dnsutils bash-completion
+sudo apt install -y nano curl wget nano git gnupg iputils-ping dnsutils bash-completion jq nfs-common
 
 # ########## Install PowerShell ##########
 
