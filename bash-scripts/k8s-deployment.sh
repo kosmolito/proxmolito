@@ -69,14 +69,17 @@ sudo apt-add-repository "deb http://apt.kubernetes.io/ kubernetes-xenial main"
 
 echo "########## Installing Kubectl, kubeadm & kubelet ##########"
 sudo apt update
-sudo apt install wget curl nano vim git kubectl=1.26.4-00 kubeadm=1.26.4-00 kubelet=1.26.4-00 -y
+sudo apt install wget curl nano vim git etcd kubectl=1.26.4-00 kubeadm=1.26.4-00 kubelet=1.26.4-00 -y
 # Mark the packages as hold so that they are not updated automatically
 echo "########## Marking the packages as hold so that they are not updated automatically ##########"
 sudo apt-mark hold kubelet kubeadm kubectl
 
-############ Install bash completion for kubectl ############
+############ Install bash completion for kubectl, kubeadm & crictl ############
 echo "########## Setting up autocomplete in bash for kubectl ##########"
 source <(kubectl completion bash) # set up autocomplete in bash into the current shell, bash-completion package should be installed first.
 echo "source <(kubectl completion bash)" >> ~/.bashrc # add autocomplete permanently to your bash shell.
+echo "alias k=kubectl" >> ~/.bashrc
 echo "complete -F __start_kubectl k" >> ~/.bashrc # add autocomplete permanently to your bash shell, for kubectl alias k.
+echo "source <(kubeadm completion bash)" >> ~/.bashrc
+echo "source <(crictl completion bash)" >> ~/.bashrc
 echo "########## Kubernetes Installation Done ##########"
