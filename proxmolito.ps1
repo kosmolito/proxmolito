@@ -68,8 +68,8 @@ do {
             $SourceFile = "$SourceFolder/$SourceFileName"
             $DestinationFile = "/tmp/$SourceFileName"
 
-            scp -o "StrictHostKeyChecking=no" $SourceFile "$($VMIP):$($DestinationFile)"
-            ssh $VMIP $DestinationFile
+            scp -o "StrictHostKeyChecking=no" $SourceFile "$($Config.VM.CloudInit.UserName)@$($VMIP):$($DestinationFile)"
+            ssh "$($Config.VM.CloudInit.UserName)@$($VMIP)" $DestinationFile
         }
 
 
@@ -112,8 +112,8 @@ do {
             $SourceFile = "$SourceFolder/$SourceFileName"
             $DestinationFile = "/tmp/$SourceFileName"
 
-            scp -o "StrictHostKeyChecking=no" $SourceFile "$($VMIP):$($DestinationFile)"
-            ssh $VMIP $DestinationFile
+            scp -o "StrictHostKeyChecking=no" $SourceFile "$($Config.VM.CloudInit.UserName)@$($VMIP):$($DestinationFile)"
+            ssh "$($Config.VM.CloudInit.UserName)@$($VMIP)" $DestinationFile
 
         }
 
@@ -157,8 +157,8 @@ do {
             $SourceFile = "$SourceFolder/$SourceFileName"
             $DestinationFile = "/tmp/$SourceFileName"
 
-            scp -o "StrictHostKeyChecking=no" $SourceFile "$($VMIP):$($DestinationFile)"
-            ssh $VMIP $DestinationFile
+            scp -o "StrictHostKeyChecking=no" $SourceFile "$($Config.VM.CloudInit.UserName)@$($VMIP):$($DestinationFile)"
+            ssh "$($Config.VM.CloudInit.UserName)@$($VMIP)" $DestinationFile
             Write-Host "Machine ID cleaned, You can now convert it to a Template." -ForegroundColor Green
             Pause
 
