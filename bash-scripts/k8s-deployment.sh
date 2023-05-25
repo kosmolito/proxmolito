@@ -69,7 +69,7 @@ sudo apt-add-repository "deb http://apt.kubernetes.io/ kubernetes-xenial main"
 
 echo "########## Installing Kubectl, kubeadm & kubelet ##########"
 sudo apt update
-sudo apt install wget curl nano vim git etcd kubectl=1.26.4-00 kubeadm=1.26.4-00 kubelet=1.26.4-00 -y
+sudo apt install wget curl nano vim git kubectl=1.26.4-00 kubeadm=1.26.4-00 kubelet=1.26.4-00 -y
 # Mark the packages as hold so that they are not updated automatically
 echo "########## Marking the packages as hold so that they are not updated automatically ##########"
 sudo apt-mark hold kubelet kubeadm kubectl
@@ -89,4 +89,5 @@ echo "source <(kubeadm completion bash)" >> ~/.bashrc
 echo "source <(crictl completion bash)" >> ~/.bashrc
 echo "source <(helm completion bash)" >> ~/.bashrc
 
+sudo systemctl restart containerd
 echo "########## Kubernetes Installation Done ##########"

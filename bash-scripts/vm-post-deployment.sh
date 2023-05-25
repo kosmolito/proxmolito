@@ -37,9 +37,9 @@ fi
 tee ~/.nanorc<<EOF
 set tabsize 2
 set tabstospaces
-bind f3 whereis main
-bind F3 findnext main
-bind f4 Replace main
+bind M-Q whereis main
+bind M-W findnext main
+bind M-A replace main
 EOF
 
 # Restart the shell so that PATH changes take effect
