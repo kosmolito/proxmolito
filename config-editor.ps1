@@ -7,7 +7,7 @@ if ($SnapShotDefault -like "y") { $SnapShotDefault = $true} else { $SnapShotDefa
 $Memory = Read-Host "Enter the default memory for the VM in MB, (default: 2048)"
 if ($Memory -eq "") { $Memory = 2048 } else { $Memory = [int]$Memory }
 
-$MaxCPUCores = [int]((((lscpu | egrep "NUMA|CPU/(s/)")[1]).Split(":")[1] -split "\s{1,}")[1]).Split("-")[1] + 1
+[int]$MaxCPUCores = nproc
 Write-Host "The Maximum number of CPU cores: $MaxCPUCores" -ForegroundColor Yellow | Out-Host 
 [int]$CPU = Read-Host "Enter the default number of CPUs for the VM, (default: 2)"
 
@@ -141,5 +141,5 @@ $ConfigSettings = [PSCustomObject]@{
 Write-Host "Saving the file $ConfigFile..." -ForegroundColor Green
 $ConfigSettings | ConvertTo-Json -Depth 5 | Out-File -FilePath $ConfigFile -Encoding UTF8 -Force
 start-sleep -Seconds 2
-$Config = $Config = Get-Content -Path $ConfigFile | ConvertFrom-Json -Depth 5
+$Config = Get-Content -Path $ConfigFile | ConvertFrom-Json -Depth 5
 Write-Host "The file $ConfigFile saved successfully." -ForegroundColor Green
