@@ -6,7 +6,7 @@ function Show-Menu {
     $VMSelected | Format-table -Property VMName,DomainName,IPAddress,DNSAddress,NetworkSwitches
     Write-Host "================ $Title ================"
     
-    Write-Host " 1: Deploy Ubuntu Server VM" -ForegroundColor Green
+    Write-Host " 1: Deploy Linux Servers" -ForegroundColor Green
     Write-Host " 2: Install Required packaes and update the VM" -ForegroundColor Green
     Write-Host " 3: Prepare VM for k8s" -ForegroundColor Green
     Write-Host " 4: Clean VM and make Template" -ForegroundColor Green
@@ -27,7 +27,14 @@ do {
         "c" { Clear-Host }
         "1" 
         {
-            & $Location\vm-deployments\ubuntu-2204-cloudinit.ps1
+            ################## Deploy Linux Servers ###################
+            Write-Host "1 = Debian 12 (Bookworm) `n2 = Ubuntu 22.04 (Jammy Jellyfish)" -ForegroundColor Green
+            $SelectOS = Read-Host "Select the OS you want to deploy"
+            switch ($SelectOS) {
+                "1" { & $Location\vm-deployments\debian-12-cloudinit.ps1 }
+                "2" { & $Location\vm-deployments\ubuntu-2204-cloudinit.ps1 }
+                Default {}
+            }
         }
 
         "2" 
