@@ -18,14 +18,11 @@ if [ ! -f /usr/bin/pwsh ]; then
     # Install system components
     apt update  && apt install -y curl gnupg apt-transport-https
 
-    # Import the public repository GPG keys
-    curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
+    # Install snapd, (package manager for snap packages)
+    apt install snapd -y
 
-    # Register the Microsoft Product feed
-    sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-debian-bullseye-prod bullseye main" > /etc/apt/sources.list.d/microsoft.list'
-
-    # Install PowerShell
-    apt update && apt install -y powershell
+    # Install PowerShell via the Snap package manager
+    snap install powershell --classic
 
 fi
 
