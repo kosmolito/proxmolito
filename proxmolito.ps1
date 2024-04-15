@@ -33,6 +33,7 @@ do {
             switch ($SelectOS) {
                 "1" { & $Location\vm-deployments\debian-12-cloudinit.ps1 }
                 "2" { & $Location\vm-deployments\ubuntu-2204-cloudinit.ps1 }
+                "3" { & $Location\vm-deployments\fedora-39-cloudinit.ps1 }
                 Default {}
             }
         }
